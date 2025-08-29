@@ -6,10 +6,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from flask_cors import CORS
 import nltk
-nltk.download('stopwords')
-nltk.download('wordnet')  # if you use lemmatizer
 
-# Load model
+nltk.data.path.append("./nltk_data")
 model = joblib.load("./fake_news_model.pkl")
 
 # Preprocessing setup
@@ -49,4 +47,4 @@ def predict():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
