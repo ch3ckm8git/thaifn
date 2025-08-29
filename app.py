@@ -5,6 +5,10 @@ import re, string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from flask_cors import CORS
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')  # if you use lemmatizer
+
 # Load model
 model = joblib.load("./fake_news_model.pkl")
 
