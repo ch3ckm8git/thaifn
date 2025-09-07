@@ -44,7 +44,8 @@ model_th = joblib.load("./thai_news_model.pkl")
 
 # Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500", "http://localhost:5500", "*"]}})
+
 
 @app.route("/predict", methods=["POST"])
 def predict_en():
@@ -79,6 +80,9 @@ def predict_th():
     proba = model_th.predict_proba(df)[0].tolist()
 
     return jsonify({"prediction": int(pred), "confidence": proba})
+@app.route("/health")
+def health():
+    return jsonify({"ok": True})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
