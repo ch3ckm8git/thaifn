@@ -5,8 +5,12 @@ import pandas as pd
 import re, string
 
 # English preprocessing
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+import nltk
+nltk.data.path.append("./nltk_data")
+
 stop_words = set(stopwords.words("english"))
 lemmatizer = WordNetLemmatizer()
 
