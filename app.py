@@ -44,11 +44,13 @@ model_th = joblib.load("./thai_news_model.pkl")
 
 # Flask app
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500", "http://localhost:5500", "*"]}})
+CORS(app)
 
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST", "OPTIONS"])
 def predict_en():
+    if request.method == "OPTIONS":
+        return '', 204
     data = request.get_json()
     title = data.get("title", "")
     text  = data.get("text", "")
@@ -64,8 +66,10 @@ def predict_en():
 
     return jsonify({"prediction": int(pred), "confidence": proba})
 
-@app.route("/predictthai", methods=["POST"])
+@app.route("/predictthai", methods=["POST", "OPTIONS"])
 def predict_th():
+    if request.method == "OPTIONS":
+        return '', 204
     data = request.get_json()
     title = data.get("title", "")
     text  = data.get("text", "")
@@ -83,18 +87,7 @@ def predict_th():
 @app.route("/health")
 def health():
     return jsonify({"ok": True})
-    
-@app.after_request
-def apply_cors_headers(response):
-    origin = request.headers.get("Origin")
-    if origin:
-        response.headers["Access-Control-Allow-Origin"] = origin
-    else:
-        response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
-    response.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
-    return response
+ 
     
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
